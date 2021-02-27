@@ -12,7 +12,7 @@ app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=1800)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://backend:m0n0w4ll@localhost/tims'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://teda:m0n0w4ll@192.168.5.8/tims'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['JWT_SECRET_KEY'] = os.urandom(64)
@@ -33,6 +33,7 @@ mail = Mail(app)
 from _api.blacklist import BLACKLIST
 
 from _api.resources.account import Login, AccountList
+from _api.resources.log import LogUnknownList, ViewImage
 
 
 #  region Region JWT function
@@ -106,3 +107,7 @@ def revoke_token_callback():
 api.add_resource(Login, '/api/account/login')
 api.add_resource(AccountList, '/api/account/list')
 # endregion
+
+# region log_unknown
+api.add_resource(LogUnknownList, '/api/log_unknown/list')
+api.add_resource(ViewImage, '/api/view/image')
