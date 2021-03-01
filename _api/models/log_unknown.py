@@ -3,7 +3,6 @@ from datetime import datetime
 
 from _api import db
 from _api.models.sub_device import SubDeviceM
-from _api.models.user import UserM
 
 
 class LogUnknownM(db.Model):

@@ -69,6 +69,7 @@ class Logout(Resource):
 
 class AccountAdd(Resource):
     @classmethod
+    @jwt_refresh_token_required
     def post(cls):
         par = global_parser([
             {"name": "user_id", "type": "str", "req": True},
@@ -91,12 +92,14 @@ class AccountAdd(Resource):
 
 class AccountList(Resource):
     @classmethod
+    @jwt_refresh_token_required
     def get(cls):
         return [x.json() for x in AccountM.list_all()], 200
 
 
 class AccountUpdate(Resource):
     @classmethod
+    @jwt_refresh_token_required
     def post(cls):
         par = global_parser([
             {"name": "id", "type": "str", "req": True},
@@ -125,6 +128,7 @@ class AccountUpdate(Resource):
 
 class AccountDelete(Resource):
     @classmethod
+    @jwt_refresh_token_required
     def post(cls):
         par = global_parser([
             {"name": "id", "type": "str", "req": True}
@@ -138,6 +142,7 @@ class AccountDelete(Resource):
 
 class ProfileUpdate(Resource):
     @classmethod
+    @jwt_refresh_token_required
     def post(cls):
         par = global_parser([
             {"name": "id", "type": "str", "req": True},

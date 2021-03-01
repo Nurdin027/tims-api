@@ -32,12 +32,12 @@ mail = Mail(app)
 
 from _api.blacklist import BLACKLIST
 
-from _api.resources.account import Login, AccountList, ProfileUpdate, Logout
+from _api.resources.account import Login, Logout, AccountList, ProfileUpdate
 from _api.resources.log import LogUnknownList, ViewImage
 from _api.resources.news import NewsList
 
 
-#  region JWT function
+#  region Region JWT function
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):
     return decrypted_token['jti'] in BLACKLIST

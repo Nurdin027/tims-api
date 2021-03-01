@@ -6,7 +6,7 @@ from _api.models.customer_group import CustomerGroupM
 
 class MainDeviceM(db.Model):
     __tablename__ = 'main_device'
-    id = db.Column(db.String, primary_key=True, default=lambda : uuid.uuid4().hex)
+    id = db.Column(db.String, primary_key=True, default=lambda: uuid.uuid4().hex)
     name = db.Column(db.String)
     customer_group_id = db.Column(db.String, db.ForeignKey(CustomerGroupM.id))
     customer_group = db.relationship(CustomerGroupM, foreign_keys=customer_group_id)
