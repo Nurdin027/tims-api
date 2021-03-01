@@ -32,7 +32,7 @@ mail = Mail(app)
 
 from _api.blacklist import BLACKLIST
 
-from _api.resources.account import Login, AccountList, ProfileUpdate
+from _api.resources.account import Login, AccountList, ProfileUpdate, Logout
 from _api.resources.log import LogUnknownList, ViewImage
 from _api.resources.news import NewsList
 
@@ -106,6 +106,7 @@ def revoke_token_callback():
 
 # region account
 api.add_resource(Login, '/api/account/login')
+api.add_resource(Logout, '/api/account/logout')
 api.add_resource(AccountList, '/api/account/list')
 api.add_resource(ProfileUpdate, '/api/profile/update')
 # endregion
