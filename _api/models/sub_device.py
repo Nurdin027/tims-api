@@ -6,13 +6,13 @@ from _api.models.main_device import MainDeviceM
 
 class SubDeviceM(db.Model):
     __tablename__ = 'sub_device'
-    id = db.Column(db.String, primary_key=True, default=lambda : uuid.uuid4().hex)
+    id = db.Column(db.String, primary_key=True, default=lambda: uuid.uuid4().hex)
     channel = db.Column(db.Integer)
     desc = db.Column(db.String, comment="Deskripsi atau nama kamera")
     detect_stat = db.Column(db.Integer, default=1)
     add_by = db.Column(db.String)
 
-    main_device_id = db.Column(db.String, db.ForeignKey(MainDeviceM.id))
+    main_device_id = db.Column(db.String, db.ForeignKey('main_device.id'))
     main_device = db.relationship(MainDeviceM, foreign_keys=main_device_id)
 
     def __init__(self,

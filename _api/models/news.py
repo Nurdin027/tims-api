@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime
 
 from _api import db
+from _api.models.account import AccountM
 from _api.models.category_news import CategoryNewsM
 
 
@@ -12,9 +13,11 @@ class NewsM(db.Model):
     id = db.Column(db.String, primary_key=True, default=uuid.uuid4().hex)
     title = db.Column(db.String)
     description = db.Column(db.String)
-    add_by = db.Column(db.String)
+    image = db.Column(db.String)
     add_time = db.Column(db.DateTime, default=datetime.now())
 
+    add_by = db.Column(db.String, db.ForeignKey(AccountM.id))
+    account = db.relationship(AccountM, foreign_keys=add_by)
     category_id = db.Column(db.String, db.ForeignKey(CategoryNewsM.id))
     category = db.relationship(CategoryNewsM, foreign_keys=category_id)
 
@@ -24,12 +27,14 @@ class NewsM(db.Model):
                  iden,
                  title,
                  description,
+                 image,
                  category_id,
                  add_by,
                  ):
         self.id = iden
         self.title = title
         self.description = description
+        self.image = image
         self.category_id = category_id
         self.add_by = add_by
 
@@ -53,8 +58,12 @@ class NewsM(db.Model):
             "id": self.id,
             "title": self.title,
             "description": self.description,
+            "image": self.image,
             "category_id": self.category_id,
             "category": self.category.name,
             "add_by": self.add_by,
+            "username": self.account.username if self.account else "",
+            "auth": self.account.auth.name if self.account else "",
+            "name": self.account.user.name if self.account else "",
             "add_time": str(self.add_time),
         }

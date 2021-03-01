@@ -1,5 +1,4 @@
-from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token, create_refresh_token, \
-    jwt_refresh_token_required
+from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token, create_refresh_token
 from flask_restful import Resource
 
 from _api import db
@@ -35,7 +34,7 @@ class Login(Resource):
             access_token = create_access_token(identity=_account.id, fresh=True, expires_delta=False)
             refresh_token = create_refresh_token(_account.id)
 
-            if _account.auth_id == 1:
+            if _account.active:
                 akun = _account.json()
                 return {
                            "access_token": access_token,
@@ -60,7 +59,6 @@ class Login(Resource):
 
 class AccountAdd(Resource):
     @classmethod
-    @jwt_refresh_token_required
     def post(cls):
         par = global_parser([
             {"name": "user_id", "type": "str", "req": True},
@@ -83,14 +81,12 @@ class AccountAdd(Resource):
 
 class AccountList(Resource):
     @classmethod
-    @jwt_refresh_token_required
     def get(cls):
         return [x.json() for x in AccountM.list_all()], 200
 
 
 class AccountUpdate(Resource):
     @classmethod
-    @jwt_refresh_token_required
     def post(cls):
         par = global_parser([
             {"name": "id", "type": "str", "req": True},
@@ -119,7 +115,6 @@ class AccountUpdate(Resource):
 
 class AccountDelete(Resource):
     @classmethod
-    @jwt_refresh_token_required
     def post(cls):
         par = global_parser([
             {"name": "id", "type": "str", "req": True}
@@ -129,3 +124,41 @@ class AccountDelete(Resource):
             hapus_field(akun)
         else:
             return {"message": "Account not found"}, 404
+
+
+class ProfileUpdate(Resource):
+    @classmethod
+    def post(cls):
+        par = global_parser([
+            {"name": "id", "type": "str", "req": True},
+            {"name": "full_name", "type": "str"},  # user
+            {"name": "nik_nrp", "type": "str"},  # user
+            {"name": "telephone", "type": "str"},  # user
+            {"name": "email", "type": "str"},  # user
+            {"name": "username", "type": "str"},  # account
+            {"name": "password", "type": "str"},  # account
+        ])
+
+        akun = AccountM.find_by_id(par['id'])
+        pesan, kode = "Fail", 400
+        if akun:
+            try:
+                user = UserM.find_by_id(akun.user_id)
+                if user:
+                    user.name = par['full_name'] if 'full_name' in par and par['full_name'] != "" else user.name
+                    user.nik_nrp = par['nik_nrp'] if 'nik_nrp' in par and par['nik_nrp'] != "" else user.nik_nrp
+                    user.telephone = par['telephone'] if 'telephone' in par and par[
+                        'telephone'] != "" else user.telephone
+                    user.email = par['email'] if 'email' in par and par['email'] != "" else user.email
+                    akun.username = par['username'] if 'username' in par and par['username'] != "" else akun.username
+                    akun.password = par['password'] if 'password' in par and par['password'] != "" else akun.password
+                    db.session.commit()
+                else:
+                    pesan, kode = "User not found", 404
+            except Exception as e:
+                print("Error: {}".format(e))
+                db.session.rollback()
+                pesan, kode = "Failed, \nError: " + e, 400
+        else:
+            pesan, kode = "User not found", 404
+        return {"message": pesan}, kode
