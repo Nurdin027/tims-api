@@ -1,4 +1,5 @@
-from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token, create_refresh_token
+from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token, create_refresh_token, \
+    jwt_refresh_token_required
 from flask_restful import Resource
 
 from _api import db
@@ -59,6 +60,7 @@ class Login(Resource):
 
 class AccountAdd(Resource):
     @classmethod
+    @jwt_refresh_token_required
     def post(cls):
         par = global_parser([
             {"name": "user_id", "type": "str", "req": True},
@@ -81,12 +83,14 @@ class AccountAdd(Resource):
 
 class AccountList(Resource):
     @classmethod
+    @jwt_refresh_token_required
     def get(cls):
-        return {"result": [x.json() for x in AccountM.list_all()]}, 200
+        return [x.json() for x in AccountM.list_all()], 200
 
 
 class AccountUpdate(Resource):
     @classmethod
+    @jwt_refresh_token_required
     def post(cls):
         par = global_parser([
             {"name": "id", "type": "str", "req": True},
@@ -115,6 +119,7 @@ class AccountUpdate(Resource):
 
 class AccountDelete(Resource):
     @classmethod
+    @jwt_refresh_token_required
     def post(cls):
         par = global_parser([
             {"name": "id", "type": "str", "req": True}
