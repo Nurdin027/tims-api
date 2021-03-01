@@ -1,4 +1,5 @@
-from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token, create_refresh_token, get_raw_jwt
+from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token, create_refresh_token, get_raw_jwt, \
+    jwt_refresh_token_required
 from flask_restful import Resource
 
 from _api import db, BLACKLIST
@@ -59,6 +60,7 @@ class Login(Resource):
 
 class Logout(Resource):
     @classmethod
+    @jwt_refresh_token_required
     def get(cls):
         jti = get_raw_jwt()['jti']  # jti is "JWT ID", a unique identifier for JWT
         BLACKLIST.add(jti)
