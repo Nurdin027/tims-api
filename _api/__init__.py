@@ -34,6 +34,7 @@ from _api.blacklist import BLACKLIST
 
 from _api.resources.account import Login, AccountList
 from _api.resources.log import LogUnknownList, ViewImage
+from _api.resources.news import NewsList
 
 
 #  region Region JWT function
@@ -61,7 +62,7 @@ def expired_token_callback():
 
 
 @jwt.invalid_token_loader
-def invalid_token_callback(error):
+def invalid_token_callback():
     return jsonify(
         {
             "description": "Signature verification failed.",
@@ -111,3 +112,8 @@ api.add_resource(AccountList, '/api/account/list')
 # region log_unknown
 api.add_resource(LogUnknownList, '/api/log_unknown/list')
 api.add_resource(ViewImage, '/api/view/image')
+# endregion
+
+# region news
+api.add_resource(NewsList, '/api/news/list')
+# endregion
