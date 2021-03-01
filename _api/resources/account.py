@@ -1,7 +1,7 @@
-from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token, create_refresh_token
+from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token, create_refresh_token, get_raw_jwt
 from flask_restful import Resource
 
-from _api import db
+from _api import db, BLACKLIST
 from _api.global_func import login_parser, global_parser, hapus_field
 from _api.models.account import AccountM
 from _api.models.user import UserM
@@ -55,6 +55,14 @@ class Login(Resource):
                        }, 200
 
         return {"message": "Wrong email or password."}, 400
+
+
+class Logout(Resource):
+    @classmethod
+    def get(cls):
+        jti = get_raw_jwt()['jti']  # jti is "JWT ID", a unique identifier for JWT
+        BLACKLIST.add(jti)
+        return {"message": "Success logged out"}, 200
 
 
 class AccountAdd(Resource):
