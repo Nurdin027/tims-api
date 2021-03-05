@@ -1,7 +1,6 @@
+from _api.models.news import NewsM
 from flask_jwt_extended import jwt_refresh_token_required
 from flask_restful import Resource
-
-from _api.models.news import NewsM
 
 
 class NewsList(Resource):

@@ -1,11 +1,10 @@
 import uuid
 from datetime import datetime
 
-from werkzeug.security import generate_password_hash, check_password_hash
-
 from _api import db
 from _api.models.auth import AuthM
 from _api.models.user import UserM
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class AccountM(db.Model):
@@ -15,6 +14,7 @@ class AccountM(db.Model):
     username = db.Column(db.String)
     password = db.Column(db.String)
     active = db.Column(db.Integer, default=1)
+    notification = db.Column(db.Integer, default=1)
     add_by = db.Column(db.String)
     add_time = db.Column(db.DateTime, default=lambda: datetime.now())
 
@@ -64,6 +64,7 @@ class AccountM(db.Model):
             "add_by": self.add_by,
             "add_time": str(self.add_time),
             "active": self.active,
+            "notification": self.notification,
 
             "auth_id": self.auth_id,
             "auth": self.auth.name if self.auth else "",
@@ -74,4 +75,9 @@ class AccountM(db.Model):
             "nik_nrp": self.user.nik_nrp if self.user else "",
             "customer_group_id": self.user.customer_group_id,
             "customer_group": self.user.customer_group.name if self.user.customer_group else "",
+            "gender_id": self.user.gender_id,
+            "gender": "Female" if self.user.gender_id == 2 else "Male",
+            "profile_picture": self.user.profile_picture,
+            "birth_date": str(self.user.birth_date),
+            "join_date": str(self.user.join_date),
         }

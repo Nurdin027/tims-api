@@ -6,9 +6,9 @@ from _api.models.main_device import MainDeviceM
 
 class SubDeviceM(db.Model):
     __tablename__ = 'sub_device'
-    id = db.Column(db.String, primary_key=True, default=lambda: uuid.uuid4().hex)
+    id = db.Column(db.String, primary_key=True, default=lambda : uuid.uuid4().hex)
     channel = db.Column(db.Integer)
-    desc = db.Column(db.String, comment="Deskripsi atau nama kamera")
+    description = db.Column(db.String, comment="Deskripsi atau nama kamera")
     detect_stat = db.Column(db.Integer, default=1)
     add_by = db.Column(db.String)
 
@@ -17,12 +17,12 @@ class SubDeviceM(db.Model):
 
     def __init__(self,
                  channel,
-                 desc,
+                 description,
                  main_device_id,
                  add_by,
                  ):
         self.channel = channel
-        self.desc = desc
+        self.description = description
         self.main_device_id = main_device_id
         self.add_by = add_by
 
@@ -53,7 +53,7 @@ class SubDeviceM(db.Model):
         return {
             "id": self.id,
             "channel": self.channel,
-            "desc": self.desc,
+            "description": self.description,
             "detect_stat": self.detect_stat,
             "main_device_id": self.main_device_id,
             "main_device": self.main_device.name if self.main_device else "",

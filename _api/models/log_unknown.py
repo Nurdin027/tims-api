@@ -3,6 +3,7 @@ from datetime import datetime
 
 from _api import db
 from _api.models.sub_device import SubDeviceM
+from _api.models.user import UserM
 
 
 class LogUnknownM(db.Model):
@@ -42,7 +43,7 @@ class LogUnknownM(db.Model):
             "id": self.id,
             "photo": self.photo,
             "sub_device_id": self.sub_device_id,
-            "sub_device_name": self.sub_device.desc,
+            "sub_device_name": self.sub_device.description,
             "main_device_name": self.sub_device.main_device.name,
             "add_time": str(self.add_time),
         }

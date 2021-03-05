@@ -14,6 +14,7 @@ class NewsM(db.Model):
     title = db.Column(db.String)
     description = db.Column(db.String)
     image = db.Column(db.String)
+    headline = db.Column(db.Integer, default=0)
     add_time = db.Column(db.DateTime, default=datetime.now())
 
     add_by = db.Column(db.String, db.ForeignKey(AccountM.id))
@@ -29,6 +30,7 @@ class NewsM(db.Model):
                  description,
                  image,
                  category_id,
+                 headline,
                  add_by,
                  ):
         self.id = iden
@@ -36,6 +38,7 @@ class NewsM(db.Model):
         self.description = description
         self.image = image
         self.category_id = category_id
+        self.headline = headline
         self.add_by = add_by
 
     @classmethod
@@ -61,6 +64,7 @@ class NewsM(db.Model):
             "image": self.image,
             "category_id": self.category_id,
             "category": self.category.name,
+            "headline": self.headline,
             "add_by": self.add_by,
             "username": self.account.username if self.account else "",
             "auth": self.account.auth.name if self.account else "",
